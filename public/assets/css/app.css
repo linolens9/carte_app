@@ -1,0 +1,1238 @@
+/* =========================================================
+   Carte App - Style Principal
+   Modern, Clean, High-Contrast & Premium Design
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --primary-light: #eff6ff;
+    --secondary: #64748b;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --dark: #0f172a;
+    --dark-surface: #1e293b;
+    --light-bg: #f8fafc;
+    --card-border: #e2e8f0;
+    --sidebar-width: 260px;
+    --topbar-height: 70px;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--light-bg);
+    color: #334155;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+/* Layout */
+.app-wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: var(--sidebar-width);
+    background: #0f172a;
+    color: #cbd5e1;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1040;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 4px 0 24px rgba(0,0,0,0.06);
+    transition: transform 0.3s ease;
+}
+
+.sidebar-header {
+    height: var(--topbar-height);
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sidebar-brand {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.sidebar-brand-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+}
+
+.sidebar-menu {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem 0.75rem;
+}
+
+.menu-title {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #64748b;
+    padding: 0.75rem 0.75rem 0.25rem;
+    font-weight: 700;
+}
+
+.nav-link-custom {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.7rem 0.85rem;
+    border-radius: 10px;
+    color: #94a3b8;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.92rem;
+    margin-bottom: 3px;
+    transition: all 0.2s ease;
+}
+
+.nav-link-custom i {
+    font-size: 1.15rem;
+    width: 22px;
+    text-align: center;
+}
+
+.nav-link-custom:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.nav-link-custom.active {
+    color: #fff;
+    background: var(--primary);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.sidebar-footer {
+    padding: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.main-content {
+    margin-left: var(--sidebar-width);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--light-bg);
+}
+
+.topbar {
+    height: var(--topbar-height);
+    background: #fff;
+    border-bottom: 1px solid var(--card-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 1020;
+}
+
+.page-body {
+    padding: 2rem;
+    flex: 1;
+}
+
+/* KPI Cards */
+.kpi-card {
+    background: #fff;
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+}
+
+.kpi-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+
+.kpi-icon {
+    width: 54px;
+    height: 54px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.kpi-value {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--dark);
+    line-height: 1.2;
+}
+
+.kpi-label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-top: 0.25rem;
+}
+
+/* Cards générales */
+.card-custom {
+    background: #fff;
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    overflow: hidden;
+}
+
+.card-header-custom {
+    background: transparent;
+    border-bottom: 1px solid var(--card-border);
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Badges */
+.badge-subtle-primary { background: #dbeafe; color: #1e40af; }
+.badge-subtle-success { background: #d1fae5; color: #065f46; }
+.badge-subtle-warning { background: #fef3c7; color: #92400e; }
+.badge-subtle-danger { background: #fee2e2; color: #991b1b; }
+.badge-subtle-secondary { background: #f1f5f9; color: #475569; }
+
+/* Boutons */
+.btn-primary-custom {
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 0.6rem 1.25rem;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.btn-primary-custom:hover {
+    background: var(--primary-hover);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+/* Tables */
+.table-custom {
+    margin-bottom: 0;
+}
+
+.table-custom th {
+    background: #f8fafc;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #64748b;
+    font-weight: 700;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--card-border);
+}
+
+.table-custom td {
+    padding: 1rem 1.25rem;
+    vertical-align: middle;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+/* Auth Page */
+.auth-bg {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.auth-card {
+    background: #ffffff;
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    width: 100%;
+    max-width: 440px;
+    overflow: hidden;
+    padding: 2.5rem 2.25rem;
+}
+
+/* Responsive */
+@media (max-width: 991.98px) {
+    .sidebar {
+        transform: translateX(-100%);
+    }
+    .sidebar.open {
+        transform: translateX(0);
+    }
+    .main-content {
+        margin-left: 0;
+    }
+}
+
+/* ============================================================
+   MODULE CARTES & IMPRESSION (SPRINT 3)
+   ============================================================ */
+
+/* Dimensions standardisées ISO/IEC 7810 ID-1 (CR-80 : 85.6 × 53.98 mm) */
+:root {
+    --cr80-width: 340px;
+    --cr80-height: 214px;
+    --cr80-radius: 11px;
+}
+
+.cr80-wrapper {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* Conteneur 3D Flip Card */
+.cr80-card-3d {
+    width: var(--cr80-width);
+    height: var(--cr80-height);
+    perspective: 1000px;
+    margin: 0 auto;
+    cursor: pointer;
+    user-select: none;
+}
+
+.cr80-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: left;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+}
+
+.cr80-card-3d.flipped .cr80-card-inner {
+    transform: rotateY(180deg);
+}
+
+/* Faces de la carte dans le conteneur 3D */
+.cr80-card-3d .cr80-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+.cr80-card-3d .cr80-verso {
+    transform: rotateY(180deg);
+}
+
+/* Faces de la carte (styles de base communs) */
+.cr80-face {
+    border-radius: var(--cr80-radius);
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.12), 0 2px 6px rgba(15, 23, 42, 0.08);
+    overflow: hidden;
+    box-sizing: border-box;
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* Rendu à plat (Planches A4, Impression, et Aperçu côte à côte) */
+.cr80-flat {
+    position: relative;
+    width: var(--cr80-width);
+    height: var(--cr80-height);
+    display: inline-block;
+    transform: none !important;
+    -webkit-backface-visibility: visible !important;
+    backface-visibility: visible !important;
+}
+
+.cr80-flat.cr80-verso,
+.cr80-flat.cr80-recto,
+.cr80-mode-both .cr80-verso,
+.cr80-mode-verso_only .cr80-verso,
+.crop-mark-card .cr80-verso {
+    transform: none !important;
+    -webkit-backface-visibility: visible !important;
+    backface-visibility: visible !important;
+}
+
+/* Structure interne */
+.cr80-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0.55rem 0.7rem 0.4rem;
+    box-sizing: border-box;
+    background: radial-gradient(circle at 90% 10%, rgba(255,255,255,0.9), rgba(248,250,252,0.85)),
+                repeating-linear-gradient(45deg, rgba(226,232,240,0.2) 0, rgba(226,232,240,0.2) 2px, transparent 2px, transparent 6px);
+}
+
+/* Ruban drapeau Gabon (Vert, Jaune, Bleu) */
+.cr80-gabon-ribbon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    display: flex;
+    z-index: 5;
+}
+.cr80-gabon-ribbon .ribbon-green { flex: 1; background: #009e49; }
+.cr80-gabon-ribbon .ribbon-yellow { flex: 1; background: #fcd116; }
+.cr80-gabon-ribbon .ribbon-blue { flex: 1; background: #0038a8; }
+
+/* En-tête Recto (Disposition: Armoirie gauche, Titre/Sous-titre centre, Logo droite) */
+/* En-tête Recto */
+.cr80-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding-bottom: 0.35rem;
+    border-bottom: 2px solid var(--c-primary, #1e3a8a);
+}
+
+.cr80-header-left {
+    flex: 1;
+    overflow: hidden;
+}
+
+.cr80-etab-name {
+    font-size: 0.68rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--c-primary, #1e3a8a);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    letter-spacing: 0.02em;
+    line-height: 1.15;
+}
+
+.cr80-card-title {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #334155;
+    letter-spacing: 0.05em;
+    line-height: 1.15;
+}
+
+.cr80-card-subtitle {
+    font-size: 0.54rem;
+    font-weight: 600;
+    color: #64748b;
+    line-height: 1.1;
+}
+
+.cr80-header-right {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cr80-logo {
+    max-height: 34px;
+    max-width: 48px;
+    object-fit: contain;
+    background: #ffffff;
+    border-radius: 4px;
+    padding: 1.5px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    display: block;
+}
+
+.cr80-logo-placeholder {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    background: rgba(30, 58, 138, 0.08);
+    color: var(--c-primary, #1e3a8a);
+    border: 1px solid rgba(30, 58, 138, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+/* Corps Recto */
+.cr80-body {
+    display: flex;
+    gap: 0.65rem;
+    align-items: flex-start;
+    flex: 1;
+    margin-top: 0.35rem;
+}
+
+.cr80-photo-col {
+    width: 72px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.cr80-photo-frame {
+    position: relative;
+    width: 70px;
+    height: 92px;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #e2e8f0;
+    border: 1.5px solid var(--c-primary, #1e3a8a);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.cr80-photo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.cr80-photo-empty {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+    background: #f1f5f9;
+}
+
+.cr80-photo-empty i {
+    font-size: 1.8rem;
+}
+
+.cr80-photo-empty span {
+    font-size: 0.65rem;
+    font-weight: 700;
+}
+
+.cr80-hologram-seal {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.9), rgba(165,243,252,0.8), rgba(244,114,182,0.8));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.55rem;
+    color: #0369a1;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+}
+
+/* Puce EMV */
+.cr80-emv-chip {
+    width: 28px;
+    height: 20px;
+    background: linear-gradient(135deg, #fef08a 0%, #eab308 50%, #ca8a04 100%);
+    border-radius: 3px;
+    position: relative;
+    border: 0.5px solid #a16207;
+    box-shadow: inset 0 0 2px rgba(0,0,0,0.2);
+}
+
+.chip-line {
+    position: absolute;
+    background: #a16207;
+    opacity: 0.6;
+}
+.chip-l1 { top: 0; bottom: 0; left: 9px; width: 0.7px; }
+.chip-l2 { top: 0; bottom: 0; right: 9px; width: 0.7px; }
+.chip-l3 { top: 9px; left: 0; right: 0; height: 0.7px; }
+
+/* Infos Bénéficiaire */
+.cr80-info-col {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.cr80-field-name {
+    margin-bottom: 0.15rem;
+    line-height: 1.15;
+}
+
+.field-val-nom {
+    display: block;
+    font-size: 0.80rem;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.field-val-prenom {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--c-primary, #1e3a8a);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cr80-badge-matricule {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: #f0f7ff;
+    border: 1px dashed #2563eb;
+    padding: 0.15rem 0.50rem 0.12rem;
+    border-radius: 6px;
+    font-size: 0.60rem;
+    margin-top: 0.2rem;
+    margin-bottom: 0.35rem;
+    width: fit-content;
+}
+
+.cr80-badge-matricule .lbl {
+    font-weight: 600;
+    color: #64748b;
+    font-size: 0.58rem;
+}
+
+.cr80-badge-matricule .val {
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: 0.02em;
+    font-size: 0.62rem;
+}
+
+.cr80-details-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.18rem;
+    font-size: 0.58rem;
+}
+
+.cr80-details-grid .info-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.35rem;
+    line-height: 1.25;
+}
+
+.cr80-details-grid .lbl {
+    color: #64748b;
+    font-weight: 600;
+    min-width: 58px;
+    width: 58px;
+    flex-shrink: 0;
+}
+
+.cr80-details-grid .val {
+    color: #1e293b;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cr80-details-grid .font-highlight {
+    color: var(--c-primary, #1e3a8a);
+    font-weight: 800;
+}
+
+.cr80-details-grid .font-exp {
+    color: #dc2626;
+    font-weight: 800;
+}
+
+/* Pied Recto */
+.cr80-footer {
+    margin-top: auto;
+    text-align: center;
+    padding-top: 0.25rem;
+}
+
+.cr80-barcode-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 36px;
+    overflow: hidden;
+}
+
+.cr80-barcode-container svg {
+    width: 95%;
+    max-width: 95%;
+    height: 36px;
+    max-height: 36px;
+    display: block;
+}
+
+.cr80-security-microtext {
+    font-size: 0.44rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #94a3b8;
+    text-transform: uppercase;
+    margin-top: 0.1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ============================================================
+   VERSO CR-80 - ALIGNEMENT EXACT
+   ============================================================ */
+.cr80-verso-inner {
+    background: #ffffff;
+    border: 1px solid rgba(0,0,0,0.06);
+    padding: 0.55rem 0.75rem 0.45rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+    position: relative;
+    height: 100%;
+}
+
+.cr80-verso-body {
+    display: flex;
+    gap: 0.75rem;
+    flex: 1;
+    margin-top: 0.35rem;
+    align-items: stretch;
+}
+
+.cr80-verso-left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-width: 0;
+}
+
+.cr80-verso-title {
+    font-size: 0.62rem;
+    font-weight: 800;
+    color: var(--c-primary, #1e3a8a);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    line-height: 1.2;
+    margin-bottom: 0.35rem;
+}
+
+.cr80-verso-title i {
+    font-size: 0.68rem;
+    line-height: 1;
+}
+
+.cr80-verso-text {
+    font-size: 0.52rem;
+    line-height: 1.35;
+    color: #334155;
+    font-weight: 500;
+    margin-bottom: auto;
+}
+
+.cr80-verso-contact {
+    font-size: 0.50rem;
+    font-weight: 600;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 0.4rem;
+    margin-bottom: 0.35rem;
+}
+
+.cr80-verso-contact i {
+    font-size: 0.58rem;
+    color: #64748b;
+}
+
+.cr80-verso-signature-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 0.3rem;
+    border-top: 1px dashed #cbd5e1;
+    position: relative;
+    min-height: 36px;
+}
+
+.signature-title {
+    font-size: 0.56rem;
+    font-weight: 700;
+    color: #1e293b;
+    line-height: 1.2;
+}
+
+.signature-stamp {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: -10px;
+    margin-right: 4px;
+}
+
+.signature-stamp .cachet-svg {
+    width: 44px;
+    height: 44px;
+    transform: rotate(-12deg);
+    opacity: 0.92;
+    display: block;
+}
+
+.signature-stamp .cachet-img {
+    max-height: 48px;
+    max-width: 58px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    transform: rotate(-8deg);
+    opacity: 0.95;
+    display: block;
+    mix-blend-mode: multiply;
+}
+
+.signature-stamp .cachet-cercle {
+    width: 36px;
+    height: 36px;
+    border: 1.2px dashed #2563eb;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.30rem;
+    font-weight: 800;
+    color: #2563eb;
+    transform: rotate(-12deg);
+    opacity: 0.9;
+    padding: 1px;
+    box-sizing: border-box;
+    line-height: 1;
+    text-align: center;
+}
+
+.signature-stamp .cachet-cercle i {
+    font-size: 0.65rem;
+    color: #2563eb;
+    margin: 1px 0;
+}
+
+.cachet-top {
+    font-size: 0.29rem;
+    letter-spacing: 0.02em;
+}
+
+.cachet-bottom {
+    font-size: 0.29rem;
+    letter-spacing: 0.04em;
+}
+
+.cr80-verso-right {
+    width: 86px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.cr80-qr-box {
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 0.35rem 0.25rem 0.3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.cr80-qr-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cr80-qr-image svg {
+    display: block;
+    width: 66px;
+    height: 66px;
+    max-width: 100%;
+    height: auto;
+}
+
+.cr80-qr-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 0.44rem;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: 0.04em;
+    margin-top: 0.25rem;
+    line-height: 1.15;
+    text-align: center;
+}
+
+.cr80-qr-hint {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 0.38rem;
+    color: #64748b;
+    line-height: 1.15;
+    margin-top: 0.15rem;
+    text-align: center;
+}
+
+.cr80-jeton-code {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 0.3rem;
+    text-align: center;
+    line-height: 1.2;
+}
+
+.cr80-jeton-code .jeton-lbl {
+    font-size: 0.42rem;
+    font-weight: 700;
+    color: #64748b;
+    letter-spacing: 0.05em;
+}
+
+.cr80-jeton-code .jeton-val {
+    font-size: 0.44rem;
+    font-family: monospace;
+    font-weight: 700;
+    color: #475569;
+    letter-spacing: 0.02em;
+}
+
+.cr80-verso-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 0.44rem;
+    color: #94a3b8;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 0.25rem;
+    margin-top: 0.2rem;
+}
+
+/* ============================================================
+   STYLES D'IMPRESSION & PLANCHES A4 (@media print)
+   ============================================================ */
+@media print {
+    /* Cache l'interface générale de l'application */
+    body {
+        background: #ffffff !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    .sidebar, .topbar, .sidebar-overlay, .btn, .no-print, nav, footer {
+        display: none !important;
+    }
+
+    .main-content {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .page-body {
+        padding: 0 !important;
+    }
+
+    /* Format de page A4 Portrait par défaut */
+    @page {
+        size: A4 portrait;
+        margin: 8mm 6mm;
+    }
+
+    /* Dimensions exactes CR-80 à l'impression : 85.60 mm × 53.98 mm */
+    .cr80-face, .cr80-flat {
+        width: 85.6mm !important;
+        height: 53.98mm !important;
+        box-shadow: none !important;
+        border: 0.25mm solid #cbd5e1 !important;
+        border-radius: 3.18mm !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        display: inline-block !important;
+        position: relative !important;
+        margin: 0 !important;
+        transform: none !important;
+        -webkit-backface-visibility: visible !important;
+        backface-visibility: visible !important;
+    }
+
+    .cr80-verso, .cr80-recto {
+        transform: none !important;
+        -webkit-backface-visibility: visible !important;
+        backface-visibility: visible !important;
+    }
+
+    /* Préservation exacte des fonds, bordures et couleurs d'impression */
+    .cr80-inner {
+        height: 100% !important;
+        box-sizing: border-box !important;
+        padding: 0.50rem 0.70rem 0.35rem !important;
+    }
+
+    .cr80-header {
+        border-bottom: 2px solid var(--c-primary, #1e3a8a) !important;
+        padding-bottom: 0.25rem !important;
+    }
+
+    .cr80-etab-name {
+        color: var(--c-primary, #1e3a8a) !important;
+    }
+
+    .cr80-card-title {
+        color: #1e293b !important;
+    }
+
+    .cr80-card-subtitle {
+        color: #64748b !important;
+    }
+
+    .cr80-photo-frame {
+        border: 1.5px solid var(--c-primary, #1e3a8a) !important;
+    }
+
+    .cr80-emv-chip {
+        background: linear-gradient(135deg, #fef08a 0%, #eab308 50%, #ca8a04 100%) !important;
+        border: 0.8px solid #a16207 !important;
+    }
+
+    .field-val-nom {
+        color: #0f172a !important;
+    }
+
+    .field-val-prenom {
+        color: var(--c-primary, #1e3a8a) !important;
+    }
+
+    .cr80-badge-matricule {
+        background: #f0f7ff !important;
+        border: 1px dashed #2563eb !important;
+    }
+
+    .cr80-badge-matricule .lbl {
+        color: #64748b !important;
+    }
+
+    .cr80-badge-matricule .val {
+        color: #0f172a !important;
+    }
+
+    .cr80-details-grid .lbl {
+        min-width: 58px !important;
+        width: 58px !important;
+        color: #64748b !important;
+    }
+
+    .cr80-details-grid .val {
+        color: #1e293b !important;
+    }
+
+    .cr80-details-grid .font-highlight {
+        color: var(--c-primary, #1e3a8a) !important;
+    }
+
+    .cr80-details-grid .font-exp {
+        color: #dc2626 !important;
+    }
+
+    .cr80-footer {
+        padding-top: 0.2rem !important;
+        margin-top: auto !important;
+    }
+
+    .cr80-barcode-container {
+        height: 34px !important;
+    }
+
+    .cr80-barcode-container svg {
+        height: 34px !important;
+        width: 95% !important;
+    }
+
+    .signature-stamp .cachet-img {
+        max-height: 48px !important;
+        max-width: 58px !important;
+        width: auto !important;
+        height: auto !important;
+        object-fit: contain !important;
+        transform: rotate(-8deg) !important;
+        opacity: 0.95 !important;
+        display: block !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    .print-page-break {
+        page-break-after: always !important;
+        break-after: page !important;
+    }
+
+    /* Grille de planche A4 (2 colonnes × 4 ou 5 lignes) */
+    .a4-print-sheet {
+        display: grid !important;
+        grid-template-columns: repeat(2, 85.6mm) !important;
+        grid-gap: 5mm 6mm !important;
+        justify-content: center !important;
+        align-content: start !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        padding-top: 2mm !important;
+    }
+
+    /* Traits de coupe / Repères de massicot aux 4 coins */
+    .crop-mark-card {
+        position: relative !important;
+    }
+
+    .crop-mark-card::before, .crop-mark-card::after {
+        content: "" !important;
+        position: absolute !important;
+        width: 3mm !important;
+        height: 3mm !important;
+        pointer-events: none !important;
+    }
+
+    .crop-mark-card::before {
+        top: -1.5mm !important;
+        left: -1.5mm !important;
+        border-top: 0.2mm solid #000 !important;
+        border-left: 0.2mm solid #000 !important;
+    }
+
+    .crop-mark-card::after {
+        bottom: -1.5mm !important;
+        right: -1.5mm !important;
+        border-bottom: 0.2mm solid #000 !important;
+        border-right: 0.2mm solid #000 !important;
+    }
+}
+
+/* =========================================================================
+   Studio Photo & Vidéo - Webcam & Smartphone USB
+   ========================================================================= */
+
+.status-indicator-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 0 6px currentColor;
+    animation: pulse-status-dot 2s infinite ease-in-out;
+}
+
+@keyframes pulse-status-dot {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.3); opacity: 0.7; }
+}
+
+.rotating-animation {
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    100% { transform: rotate(360deg); }
+}
+
+.video-viewport-container {
+    position: relative;
+    user-select: none;
+    background-color: #000;
+}
+
+/* Guide visage ovale conforme OACI (Ratio 3:4) */
+.face-guide-overlay {
+    z-index: 4;
+}
+
+.face-guide-oval {
+    width: 170px;
+    height: 226px;
+    border: 2px dashed rgba(245, 158, 11, 0.85); /* Jaune ambre haute visibilité */
+    border-radius: 50% / 60% 60% 40% 40%;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.38); /* Masque d'assombrissement périphérique */
+    pointer-events: none;
+    transition: border-color 0.3s ease;
+}
+
+.camera-flash-overlay {
+    z-index: 8;
+    transition: opacity 0.2s ease-out;
+}
+
+.camera-flash-active {
+    opacity: 0.95 !important;
+}
+
+.pointer-events-none {
+    pointer-events: none !important;
+}
+
+@keyframes pulse-scale {
+    0% { transform: translate(-50%, -50%) scale(1.4); opacity: 0; }
+    50% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.8; }
+}
+
+.animate-pulse-scale {
+    animation: pulse-scale 1s infinite ease-in-out;
+}

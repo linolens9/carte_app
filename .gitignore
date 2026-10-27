@@ -1,0 +1,22 @@
+# Configuration sensible et secrets
+.env
+.env.backup
+.env.local
+
+# Fichiers temporaires & scratch
+/scratch/
+storage/installed.lock
+
+# Logs et sauvegardes
+storage/logs/*.log
+storage/backups/*.sql.gz
+
+# Système & IDE
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Dépendances (si ajoutées via Composer / NPM)
+/vendor/
+/node_modules/

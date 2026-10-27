@@ -1,0 +1,18 @@
+DirectoryIndex index.php
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Protection des fichiers et dossiers internes
+    <FilesMatch "^\.env|composer\.(json|lock)|README\.md|\.git">
+        Order allow,deny
+        Deny from all
+    </FilesMatch>
+
+    RewriteRule ^(app|config|database|storage|bin)/ - [F,L]
+
+    # Redirection transparente vers public/
+    RewriteRule ^$ public/ [L]
+    RewriteRule (.*) public/$1 [L]
+</IfModule>
+
