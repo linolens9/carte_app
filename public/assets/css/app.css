@@ -344,6 +344,10 @@ body {
     background: #f1f5f9;
 }
 
+.topbar .dropdown-menu {
+    z-index: 1060 !important;
+}
+
 /* ============================================================
    RESPONSIVE DESIGN SMARTPHONE & TABLETTE
    ============================================================ */

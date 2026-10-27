@@ -172,7 +172,7 @@ declare(strict_types=1);
     <div class="main-content">
         <!-- Topbar -->
         <header class="topbar">
-            <div class="d-flex align-items-center gap-2 gap-sm-3 overflow-hidden">
+            <div class="d-flex align-items-center gap-2 gap-sm-3">
                 <button class="btn btn-light d-lg-none flex-shrink-0" id="sidebarToggle" aria-label="Menu latéral" title="Menu">
                     <i class="bi bi-list fs-5"></i>
                 </button>
@@ -182,8 +182,8 @@ declare(strict_types=1);
                     $userAccessibleEtabs = \App\Core\Auth::getAccessibleEtablissements();
                 ?>
                 <?php if (\App\Core\Auth::hasRole('admin') || count($userAccessibleEtabs) > 1): ?>
-                    <div class="dropdown text-truncate">
-                        <button class="btn btn-light border d-flex align-items-center gap-2 rounded-pill px-2 px-sm-3 py-1 py-sm-2 etab-selector-btn" type="button" data-bs-toggle="dropdown">
+                    <div class="dropdown">
+                        <button class="btn btn-light border d-flex align-items-center gap-2 rounded-pill px-2 px-sm-3 py-1 py-sm-2 etab-selector-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-building text-primary"></i>
                             <span class="fw-semibold text-truncate etab-name-truncate">
                                 <?= $active_etab ? htmlspecialchars($active_etab['nom']) : 'Tous les établissements' ?>
