@@ -136,11 +136,16 @@ declare(strict_types=1);
                     </a>
                 <?php endif; ?>
             <?php endif; ?>
+
+            <a href="<?= $base_path ?>/profil" class="nav-link-custom <?= str_contains($_SERVER['REQUEST_URI'] ?? '', '/profil') ? 'active' : '' ?>">
+                <i class="bi bi-person-circle"></i>
+                <span>Profil</span>
+            </a>
         </div>
 
         <div class="sidebar-footer">
-            <div class="d-flex align-items-center gap-3">
-                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold" style="width: 40px; height: 40px;">
+            <a href="<?= $base_path ?>/profil" class="d-flex align-items-center gap-3 text-decoration-none" title="Accéder à mon profil">
+                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold flex-shrink-0" style="width: 40px; height: 40px;">
                     <?= strtoupper(substr($current_user['prenom'] ?? 'U', 0, 1)) . strtoupper(substr($current_user['nom'] ?? 'N', 0, 1)) ?>
                 </div>
                 <div class="overflow-hidden flex-1">
@@ -151,7 +156,8 @@ declare(strict_types=1);
                         <?= htmlspecialchars($current_user['role_libelle'] ?? 'Utilisateur') ?>
                     </div>
                 </div>
-            </div>
+                <i class="bi bi-chevron-right text-secondary small ms-auto"></i>
+            </a>
         </div>
     </aside>
 
@@ -225,9 +231,6 @@ declare(strict_types=1);
             <div class="d-flex align-items-center gap-2">
                 <!-- Boutons bureau (grand écran) -->
                 <div class="d-none d-md-flex align-items-center gap-2">
-                    <a href="<?= $base_path ?>/change-password" class="btn btn-outline-secondary btn-sm rounded-pill" title="Modifier mot de passe">
-                        <i class="bi bi-key me-1"></i>Mot de passe
-                    </a>
                     <a href="<?= $base_path ?>/logout" class="btn btn-outline-danger btn-sm rounded-pill" title="Se déconnecter">
                         <i class="bi bi-box-arrow-right me-1"></i>Déconnexion
                     </a>
@@ -247,8 +250,8 @@ declare(strict_types=1);
                             <small class="badge bg-primary-subtle text-primary border border-primary-subtle"><?= htmlspecialchars($current_user['role_libelle'] ?? 'Utilisateur') ?></small>
                         </li>
                         <li>
-                            <a class="dropdown-item py-2" href="<?= $base_path ?>/change-password">
-                                <i class="bi bi-key text-muted me-2"></i>Modifier mot de passe
+                            <a class="dropdown-item py-2" href="<?= $base_path ?>/profil">
+                                <i class="bi bi-person-circle text-muted me-2"></i>Mon Profil
                             </a>
                         </li>
                         <li><hr class="dropdown-divider my-1"></li>

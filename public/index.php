@@ -44,8 +44,10 @@ $router->post('/forgot-password', [\App\Controllers\AuthController::class, 'send
 $router->get('/reset-password/{token}', [\App\Controllers\AuthController::class, 'showResetPassword'], ['guest']);
 $router->post('/reset-password', [\App\Controllers\AuthController::class, 'resetPassword'], ['guest']);
 
-$router->get('/change-password', [\App\Controllers\AuthController::class, 'showChangePassword'], ['auth']);
-$router->post('/change-password', [\App\Controllers\AuthController::class, 'updatePassword'], ['auth']);
+$router->get('/profil', [\App\Controllers\ProfileController::class, 'index'], ['auth']);
+$router->post('/profil', [\App\Controllers\ProfileController::class, 'update'], ['auth']);
+$router->get('/change-password', [\App\Controllers\ProfileController::class, 'index'], ['auth']);
+$router->post('/change-password', [\App\Controllers\ProfileController::class, 'update'], ['auth']);
 
 // 2. Tableau de bord
 $router->get('/dashboard', [\App\Controllers\DashboardController::class, 'index'], ['auth']);
