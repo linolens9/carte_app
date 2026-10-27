@@ -149,6 +149,7 @@ class Auth
             'nom' => $user['nom'],
             'prenom' => $user['prenom'],
             'email' => $user['email'],
+            'photo' => $user['photo'] ?? null,
             'role_id' => (int)$user['role_id'],
             'role_code' => $user['role_code'],
             'role_libelle' => $user['role_libelle'],

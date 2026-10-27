@@ -8,13 +8,30 @@ use App\Core\Auth;
 use App\Core\Database;
 use App\Core\Session;
 use App\Core\Logger;
+use App\Services\PhotoService;
 use PDO;
+use Throwable;
 
 /**
  * Contrôleur de gestion du profil de l'utilisateur connecté
  */
 class ProfileController extends Controller
 {
+    /**
+     * S'assure que la colonne photo existe dans la table users (migration tolérante)
+     */
+    private function ensurePhotoColumnExists(PDO $db): void
+    {
+        try {
+            $stmt = $db->query("SHOW COLUMNS FROM users LIKE 'photo'");
+            if (!$stmt->fetch()) {
+                $db->exec("ALTER TABLE users ADD COLUMN photo VARCHAR(255) NULL AFTER telephone");
+            }
+        } catch (Throwable $e) {
+            // Silencieux si déjà existant ou restrictions de droits
+        }
+    }
+
     /**
      * Affichage du profil utilisateur
      */
@@ -27,6 +44,7 @@ class ProfileController extends Controller
 
         $sessionUser = Auth::user();
         $db = Database::getInstance();
+        $this->ensurePhotoColumnExists($db);
 
         $stmt = $db->prepare("
             SELECT u.*, r.libelle AS role_libelle, r.code AS role_code
@@ -56,7 +74,7 @@ class ProfileController extends Controller
     }
 
     /**
-     * Mise à jour des informations du profil (nom, prénom, e-mail, mot de passe)
+     * Mise à jour des informations du profil (nom, prénom, e-mail, photo, mot de passe)
      */
     public function update(): void
     {
@@ -68,6 +86,12 @@ class ProfileController extends Controller
         $sessionUser = Auth::user();
         $userId = (int)$sessionUser['id'];
         $db = Database::getInstance();
+        $this->ensurePhotoColumnExists($db);
+
+        // Récupérer l'utilisateur actuel
+        $stmtCurrent = $db->prepare("SELECT * FROM users WHERE id = :id LIMIT 1");
+        $stmtCurrent->execute([':id' => $userId]);
+        $currentUser = $stmtCurrent->fetch();
 
         // Données postées
         $nom = strtoupper(trim((string)$this->request->post('nom', '')));
@@ -79,12 +103,17 @@ class ProfileController extends Controller
         $newPassword = (string)$this->request->post('new_password', '');
         $confirmPassword = (string)$this->request->post('confirm_password', '');
 
+        $deletePhoto = (bool)$this->request->post('delete_photo', false);
+        $photoBase64 = (string)$this->request->post('photo_base64', '');
+        $photoFile = $this->request->file('photo') ?? ($_FILES['photo'] ?? null);
+
         $errors = [];
         $old = [
             'nom' => $nom,
             'prenom' => $prenom,
             'email' => $email,
-            'telephone' => $telephone
+            'telephone' => $telephone,
+            'photo' => $currentUser['photo'] ?? null
         ];
 
         // Validations informations personnelles
@@ -119,18 +148,46 @@ class ProfileController extends Controller
             $errors['telephone'][] = "Le numéro de téléphone ne doit pas dépasser 30 caractères.";
         }
 
-        // Validation mot de passe (optionnelle, uniquement si renseigné)
+        // Traitement de la photo de profil
+        $newPhotoPath = $currentUser['photo'] ?? null;
+        $photoUpdated = false;
+
+        if ($deletePhoto) {
+            // Suppression de l'ancienne photo sur le disque
+            if (!empty($currentUser['photo'])) {
+                $oldDiskPath = dirname(__DIR__, 2) . '/public/' . $currentUser['photo'];
+                if (file_exists($oldDiskPath)) {
+                    @unlink($oldDiskPath);
+                }
+            }
+            $newPhotoPath = null;
+            $photoUpdated = true;
+        } elseif (!empty($photoBase64)) {
+            try {
+                $photoService = new PhotoService();
+                $newPhotoPath = $photoService->processBase64($photoBase64);
+                $photoUpdated = true;
+            } catch (Throwable $e) {
+                $errors['photo'][] = "Erreur lors du traitement de la photo : " . $e->getMessage();
+            }
+        } elseif ($photoFile && isset($photoFile['error']) && $photoFile['error'] === UPLOAD_ERR_OK) {
+            try {
+                $photoService = new PhotoService();
+                $newPhotoPath = $photoService->processUploadedFile($photoFile);
+                $photoUpdated = true;
+            } catch (Throwable $e) {
+                $errors['photo'][] = "Erreur de téléversement : " . $e->getMessage();
+            }
+        }
+
+        // Validation mot de passe (optionnelle)
         $isChangingPassword = !empty($newPassword) || !empty($currentPassword) || !empty($confirmPassword);
 
         if ($isChangingPassword) {
             if (empty($currentPassword)) {
                 $errors['current_password'][] = "Le mot de passe actuel est requis pour autoriser la modification.";
             } else {
-                // Vérifier le mot de passe actuel
-                $pwdStmt = $db->prepare("SELECT mot_de_passe FROM users WHERE id = :id");
-                $pwdStmt->execute([':id' => $userId]);
-                $currentHash = $pwdStmt->fetchColumn();
-
+                $currentHash = $currentUser['mot_de_passe'] ?? '';
                 if (!$currentHash || !password_verify($currentPassword, (string)$currentHash)) {
                     $errors['current_password'][] = "Le mot de passe actuel est incorrect.";
                 }
@@ -154,53 +211,46 @@ class ProfileController extends Controller
         }
 
         // Mise à jour en base de données
+        $params = [
+            ':nom' => $nom,
+            ':prenom' => $prenom,
+            ':email' => $email,
+            ':telephone' => !empty($telephone) ? $telephone : null,
+            ':id' => $userId
+        ];
+
+        $updateFields = [
+            'nom = :nom',
+            'prenom = :prenom',
+            'email = :email',
+            'telephone = :telephone',
+            'updated_at = NOW()'
+        ];
+
+        if ($photoUpdated) {
+            $updateFields[] = 'photo = :photo';
+            $params[':photo'] = $newPhotoPath;
+        }
+
         if ($isChangingPassword) {
             $passwordHash = password_hash($newPassword, PASSWORD_ARGON2ID);
-            $updateSql = "
-                UPDATE users
-                SET nom = :nom,
-                    prenom = :prenom,
-                    email = :email,
-                    telephone = :telephone,
-                    mot_de_passe = :pwd,
-                    doit_changer_mdp = 0,
-                    updated_at = NOW()
-                WHERE id = :id
-            ";
-            $updateStmt = $db->prepare($updateSql);
-            $updateStmt->execute([
-                ':nom' => $nom,
-                ':prenom' => $prenom,
-                ':email' => $email,
-                ':telephone' => !empty($telephone) ? $telephone : null,
-                ':pwd' => $passwordHash,
-                ':id' => $userId
-            ]);
-        } else {
-            $updateSql = "
-                UPDATE users
-                SET nom = :nom,
-                    prenom = :prenom,
-                    email = :email,
-                    telephone = :telephone,
-                    updated_at = NOW()
-                WHERE id = :id
-            ";
-            $updateStmt = $db->prepare($updateSql);
-            $updateStmt->execute([
-                ':nom' => $nom,
-                ':prenom' => $prenom,
-                ':email' => $email,
-                ':telephone' => !empty($telephone) ? $telephone : null,
-                ':id' => $userId
-            ]);
+            $updateFields[] = 'mot_de_passe = :pwd';
+            $updateFields[] = 'doit_changer_mdp = 0';
+            $params[':pwd'] = $passwordHash;
         }
+
+        $updateSql = "UPDATE users SET " . implode(', ', $updateFields) . " WHERE id = :id";
+        $updateStmt = $db->prepare($updateSql);
+        $updateStmt->execute($params);
 
         // Mise à jour de la session utilisateur active
         $updatedSession = Auth::user();
         $updatedSession['nom'] = $nom;
         $updatedSession['prenom'] = $prenom;
         $updatedSession['email'] = $email;
+        if ($photoUpdated) {
+            $updatedSession['photo'] = $newPhotoPath;
+        }
         if ($isChangingPassword) {
             $updatedSession['doit_changer_mdp'] = false;
         }
@@ -211,6 +261,7 @@ class ProfileController extends Controller
             'nom' => $nom,
             'prenom' => $prenom,
             'email' => $email,
+            'photo_updated' => $photoUpdated,
             'password_changed' => $isChangingPassword
         ], $this->request);
 

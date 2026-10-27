@@ -145,9 +145,13 @@ declare(strict_types=1);
 
         <div class="sidebar-footer">
             <a href="<?= $base_path ?>/profil" class="d-flex align-items-center gap-3 text-decoration-none" title="Accéder à mon profil">
-                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold flex-shrink-0" style="width: 40px; height: 40px;">
-                    <?= strtoupper(substr($current_user['prenom'] ?? 'U', 0, 1)) . strtoupper(substr($current_user['nom'] ?? 'N', 0, 1)) ?>
-                </div>
+                <?php if (!empty($current_user['photo'])): ?>
+                    <img src="<?= $base_path ?>/<?= htmlspecialchars($current_user['photo']) ?>" alt="Photo de profil" class="rounded-circle object-fit-cover flex-shrink-0 border border-secondary" style="width: 40px; height: 40px;">
+                <?php else: ?>
+                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold flex-shrink-0" style="width: 40px; height: 40px;">
+                        <?= strtoupper(substr($current_user['prenom'] ?? 'U', 0, 1)) . strtoupper(substr($current_user['nom'] ?? 'N', 0, 1)) ?>
+                    </div>
+                <?php endif; ?>
                 <div class="overflow-hidden flex-1">
                     <div class="text-white text-truncate fw-semibold" style="font-size: 0.88rem;">
                         <?= htmlspecialchars(($current_user['prenom'] ?? '') . ' ' . ($current_user['nom'] ?? '')) ?>
@@ -239,15 +243,24 @@ declare(strict_types=1);
                 <!-- Menu Utilisateur (Mobile & Dropdown Rapide) -->
                 <div class="dropdown">
                     <button class="btn btn-light border rounded-pill d-flex align-items-center gap-2 p-1 pe-2 topbar-user-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Menu utilisateur">
-                        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold" style="width: 32px; height: 32px; font-size: 0.8rem;">
-                            <?= strtoupper(substr($current_user['prenom'] ?? 'U', 0, 1)) . strtoupper(substr($current_user['nom'] ?? 'N', 0, 1)) ?>
-                        </div>
+                        <?php if (!empty($current_user['photo'])): ?>
+                            <img src="<?= $base_path ?>/<?= htmlspecialchars($current_user['photo']) ?>" alt="Avatar" class="rounded-circle object-fit-cover border" style="width: 32px; height: 32px;">
+                        <?php else: ?>
+                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold" style="width: 32px; height: 32px; font-size: 0.8rem;">
+                                <?= strtoupper(substr($current_user['prenom'] ?? 'U', 0, 1)) . strtoupper(substr($current_user['nom'] ?? 'N', 0, 1)) ?>
+                            </div>
+                        <?php endif; ?>
                         <i class="bi bi-chevron-down text-muted" style="font-size: 0.7rem;"></i>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end shadow-sm" style="min-width: 230px;">
-                        <li class="px-3 py-2 border-bottom">
-                            <div class="fw-semibold text-truncate"><?= htmlspecialchars(($current_user['prenom'] ?? '') . ' ' . ($current_user['nom'] ?? '')) ?></div>
-                            <small class="badge bg-primary-subtle text-primary border border-primary-subtle"><?= htmlspecialchars($current_user['role_libelle'] ?? 'Utilisateur') ?></small>
+                        <li class="px-3 py-2 border-bottom d-flex align-items-center gap-2">
+                            <?php if (!empty($current_user['photo'])): ?>
+                                <img src="<?= $base_path ?>/<?= htmlspecialchars($current_user['photo']) ?>" alt="Avatar" class="rounded-circle object-fit-cover border flex-shrink-0" style="width: 38px; height: 38px;">
+                            <?php endif; ?>
+                            <div class="overflow-hidden flex-1">
+                                <div class="fw-semibold text-truncate"><?= htmlspecialchars(($current_user['prenom'] ?? '') . ' ' . ($current_user['nom'] ?? '')) ?></div>
+                                <small class="badge bg-primary-subtle text-primary border border-primary-subtle"><?= htmlspecialchars($current_user['role_libelle'] ?? 'Utilisateur') ?></small>
+                            </div>
                         </li>
                         <li>
                             <a class="dropdown-item py-2" href="<?= $base_path ?>/profil">

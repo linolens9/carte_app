@@ -52,6 +52,7 @@ CREATE TABLE IF NOT EXISTS users (
     prenom VARCHAR(100) NOT NULL,
     email VARCHAR(190) NOT NULL UNIQUE,
     telephone VARCHAR(30) NULL,
+    photo VARCHAR(255) NULL,
     mot_de_passe VARCHAR(255) NOT NULL,
     statut ENUM('actif','inactif','verrouille') NOT NULL DEFAULT 'actif',
     tentatives_echec TINYINT UNSIGNED NOT NULL DEFAULT 0,

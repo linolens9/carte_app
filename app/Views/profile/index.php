@@ -18,19 +18,57 @@ declare(strict_types=1);
     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
         <div>
             <h2 class="fw-bold text-dark mb-0">Mon Profil</h2>
-            <p class="text-muted small mb-0">Consultez et modifiez vos informations personnelles et vos identifiants d'accès.</p>
+            <p class="text-muted small mb-0">Consultez et modifiez vos informations personnelles, votre photo et vos identifiants d'accès.</p>
         </div>
     </div>
 </div>
 
 <div class="row g-4">
-    <!-- Colonne Gauche : Aperçu du profil -->
+    <!-- Colonne Gauche : Aperçu du profil et Photo -->
     <div class="col-lg-4">
         <div class="card-custom text-center p-4 mb-4">
-            <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-primary text-white shadow-sm mb-3 fw-bold" 
-                 style="width: 86px; height: 86px; font-size: 2rem; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);">
-                <?= strtoupper(substr($user['prenom'] ?? 'U', 0, 1)) . strtoupper(substr($user['nom'] ?? 'N', 0, 1)) ?>
+            <!-- Conteneur Photo de Profil avec déclencheur caméra -->
+            <div class="position-relative d-inline-block mb-3">
+                <div id="avatarContainer" class="d-inline-flex align-items-center justify-content-center rounded-circle shadow-sm border overflow-hidden position-relative" 
+                     style="width: 110px; height: 110px; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);">
+                    <?php if (!empty($user['photo'])): ?>
+                        <img id="avatarImage" src="<?= $base_path ?>/<?= htmlspecialchars($user['photo']) ?>" alt="Avatar" class="w-100 h-100 object-fit-cover">
+                        <div id="avatarInitials" class="text-white fw-bold d-none" style="font-size: 2.5rem;">
+                            <?= strtoupper(substr($user['prenom'] ?? 'U', 0, 1)) . strtoupper(substr($user['nom'] ?? 'N', 0, 1)) ?>
+                        </div>
+                    <?php else: ?>
+                        <img id="avatarImage" src="" alt="Avatar" class="w-100 h-100 object-fit-cover d-none">
+                        <div id="avatarInitials" class="text-white fw-bold" style="font-size: 2.5rem;">
+                            <?= strtoupper(substr($user['prenom'] ?? 'U', 0, 1)) . strtoupper(substr($user['nom'] ?? 'N', 0, 1)) ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+                <!-- Badge bouton caméra -->
+                <button type="button" 
+                        class="btn btn-primary rounded-circle position-absolute bottom-0 end-0 shadow d-flex align-items-center justify-content-center p-0" 
+                        style="width: 36px; height: 36px; border: 2px solid #fff;" 
+                        id="btnTriggerUpload" 
+                        title="Changer ma photo de profil">
+                    <i class="bi bi-camera-fill fs-6"></i>
+                </button>
             </div>
+
+            <!-- Actions sur la photo -->
+            <div class="d-flex align-items-center justify-content-center gap-2 mb-3">
+                <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3" id="btnChangePhoto">
+                    <i class="bi bi-upload me-1"></i>Changer photo
+                </button>
+                <?php if (!empty($user['photo'])): ?>
+                    <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-2" id="btnDeletePhoto" title="Supprimer la photo actuelle">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                <?php endif; ?>
+            </div>
+
+            <div id="photoStatusBadge" class="small text-success fw-semibold mb-3 d-none">
+                <i class="bi bi-check-circle-fill me-1"></i>Nouvelle photo prête (pensez à enregistrer)
+            </div>
+
             <h5 class="fw-bold mb-1 text-dark"><?= htmlspecialchars(($user['prenom'] ?? '') . ' ' . ($user['nom'] ?? '')) ?></h5>
             <p class="text-muted small mb-2"><?= htmlspecialchars($user['email'] ?? '') ?></p>
             <div>
@@ -93,7 +131,7 @@ declare(strict_types=1);
             <div class="card-header-custom">
                 <div>
                     <h5 class="fw-bold mb-0 text-dark">Modifier mes informations</h5>
-                    <small class="text-muted">Mettez à jour vos informations de contact et votre mot de passe de connexion.</small>
+                    <small class="text-muted">Mettez à jour vos informations de contact, votre photo et votre mot de passe.</small>
                 </div>
                 <div class="sidebar-brand-icon" style="width: 42px; height: 42px; font-size: 1.2rem;">
                     <i class="bi bi-person-gear"></i>
@@ -101,8 +139,18 @@ declare(strict_types=1);
             </div>
 
             <div class="p-4">
-                <form action="<?= $base_path ?>/profil" method="POST" autocomplete="off">
+                <form action="<?= $base_path ?>/profil" method="POST" enctype="multipart/form-data" autocomplete="off" id="profileForm">
                     <?= $csrf_input ?>
+                    
+                    <!-- Champs invisibles pour la gestion de la photo -->
+                    <input type="file" name="photo" id="avatarFileInput" accept="image/jpeg,image/png,image/webp" class="d-none">
+                    <input type="hidden" name="delete_photo" id="deletePhotoInput" value="0">
+
+                    <?php if (!empty($errors['photo'])): ?>
+                        <div class="alert alert-danger py-2 small mb-3">
+                            <i class="bi bi-exclamation-triangle-fill me-1"></i><?= htmlspecialchars($errors['photo'][0]) ?>
+                        </div>
+                    <?php endif; ?>
 
                     <!-- Section Informations personnelles -->
                     <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom">
@@ -257,6 +305,94 @@ declare(strict_types=1);
 </div>
 
 <script>
+    // Déclencheur du sélecteur de fichier photo
+    const avatarFileInput = document.getElementById('avatarFileInput');
+    const btnTriggerUpload = document.getElementById('btnTriggerUpload');
+    const btnChangePhoto = document.getElementById('btnChangePhoto');
+    const btnDeletePhoto = document.getElementById('btnDeletePhoto');
+    const avatarImage = document.getElementById('avatarImage');
+    const avatarInitials = document.getElementById('avatarInitials');
+    const deletePhotoInput = document.getElementById('deletePhotoInput');
+    const photoStatusBadge = document.getElementById('photoStatusBadge');
+
+    function openPhotoPicker() {
+        if (avatarFileInput) avatarFileInput.click();
+    }
+
+    if (btnTriggerUpload) btnTriggerUpload.addEventListener('click', openPhotoPicker);
+    if (btnChangePhoto) btnChangePhoto.addEventListener('click', openPhotoPicker);
+
+    // Prévisualisation instantanée de l'image sélectionnée
+    if (avatarFileInput) {
+        avatarFileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            // Vérification taille (max 6 Mo)
+            if (file.size > 6 * 1024 * 1024) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Fichier trop lourd',
+                    text: 'Veuillez sélectionner une image inférieure à 6 Mo.'
+                });
+                avatarFileInput.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                if (avatarImage) {
+                    avatarImage.src = event.target.result;
+                    avatarImage.classList.remove('d-none');
+                }
+                if (avatarInitials) {
+                    avatarInitials.classList.add('d-none');
+                }
+                if (deletePhotoInput) {
+                    deletePhotoInput.value = '0';
+                }
+                if (photoStatusBadge) {
+                    photoStatusBadge.classList.remove('d-none');
+                }
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    // Bouton de suppression de photo
+    if (btnDeletePhoto) {
+        btnDeletePhoto.addEventListener('click', () => {
+            Swal.fire({
+                title: 'Supprimer la photo ?',
+                text: 'Votre avatar sera réinitialisé avec vos initiales lors de la validation.',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Oui, réinitialiser',
+                cancelButtonText: 'Annuler'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    if (deletePhotoInput) deletePhotoInput.value = '1';
+                    if (avatarFileInput) avatarFileInput.value = '';
+                    if (avatarImage) {
+                        avatarImage.src = '';
+                        avatarImage.classList.add('d-none');
+                    }
+                    if (avatarInitials) {
+                        avatarInitials.classList.remove('d-none');
+                    }
+                    btnDeletePhoto.classList.add('d-none');
+                    if (photoStatusBadge) {
+                        photoStatusBadge.innerHTML = '<i class="bi bi-trash-fill text-danger me-1"></i>Photo supprimée (pensez à enregistrer)';
+                        photoStatusBadge.className = 'small text-danger fw-semibold mb-3';
+                        photoStatusBadge.classList.remove('d-none');
+                    }
+                }
+            });
+        });
+    }
+
     // Basculer l'affichage du mot de passe
     document.querySelectorAll('.btn-toggle-password').forEach(btn => {
         btn.addEventListener('click', () => {
