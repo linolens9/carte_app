@@ -288,16 +288,179 @@ body {
     padding: 2.5rem 2.25rem;
 }
 
-/* Responsive */
+/* Bouton Croix (X) de fermeture de sidebar sur mobile */
+.sidebar-close-btn {
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+    border: none;
+    color: #fff !important;
+    transition: background 0.2s ease, transform 0.2s ease;
+    cursor: pointer;
+}
+.sidebar-close-btn:hover,
+.sidebar-close-btn:focus,
+.sidebar-close-btn:active {
+    background: rgba(255, 255, 255, 0.25);
+    color: #fff !important;
+    transform: scale(1.08);
+}
+
+/* Overlay sombre flouté pour smartphone lorsque la sidebar est ouverte */
+.sidebar-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 1040;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+.sidebar-backdrop.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Tronquage intelligent du nom de l'établissement */
+.etab-name-truncate {
+    max-width: 220px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.topbar-user-btn {
+    transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+.topbar-user-btn:hover {
+    background: #f1f5f9;
+}
+
+/* ============================================================
+   RESPONSIVE DESIGN SMARTPHONE & TABLETTE
+   ============================================================ */
+
 @media (max-width: 991.98px) {
     .sidebar {
         transform: translateX(-100%);
+        z-index: 1050;
+        width: 280px;
+        max-width: 82vw;
+        box-shadow: 10px 0 35px rgba(0, 0, 0, 0.35);
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .sidebar.open {
         transform: translateX(0);
     }
     .main-content {
         margin-left: 0;
+        min-width: 0;
+        width: 100%;
+    }
+}
+
+@media (max-width: 767.98px) {
+    :root {
+        --topbar-height: 60px;
+    }
+    
+    .topbar {
+        height: 60px;
+        padding: 0 0.85rem;
+    }
+
+    .etab-name-truncate {
+        max-width: 130px;
+        font-size: 0.85rem;
+    }
+
+    .etab-selector-btn {
+        padding: 0.35rem 0.65rem !important;
+        font-size: 0.85rem;
+    }
+
+    .page-body {
+        padding: 1.15rem 0.85rem;
+    }
+
+    /* Défilement horizontal fluide et sans scrollbar parasite pour les pills de statut */
+    .nav-pills {
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        padding-bottom: 6px;
+    }
+    .nav-pills::-webkit-scrollbar {
+        display: none;
+    }
+    .nav-pills .nav-item {
+        flex-shrink: 0;
+    }
+
+    /* Titres de page */
+    .page-header h1,
+    .page-header h2,
+    h2.fw-bold {
+        font-size: 1.45rem;
+    }
+
+    /* Cartes et conteneurs */
+    .card-custom {
+        border-radius: 14px;
+    }
+    .card-custom .p-4 {
+        padding: 1.25rem 1rem !important;
+    }
+    .card-header-custom {
+        padding: 1rem;
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 0.75rem;
+    }
+
+    /* KPI cards */
+    .kpi-card {
+        padding: 1.15rem 1rem;
+        border-radius: 14px;
+    }
+
+    /* Tableaux sur mobile */
+    .table-responsive {
+        -webkit-overflow-scrolling: touch;
+        border-radius: 10px;
+    }
+    .table th, .table td {
+        white-space: nowrap;
+        padding: 0.65rem 0.75rem;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .topbar {
+        padding: 0 0.65rem;
+    }
+    .etab-name-truncate {
+        max-width: 95px;
+    }
+    .page-body {
+        padding: 1rem 0.65rem;
+    }
+    .cr80-card-3d {
+        max-width: 100%;
+        transform: scale(0.92);
+        transform-origin: center top;
+        margin-bottom: -15px;
     }
 }
 

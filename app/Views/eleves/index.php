@@ -77,7 +77,10 @@ declare(strict_types=1);
                 </select>
             </div>
             <div class="col-md-1 d-grid">
-                <button type="submit" class="btn btn-dark"><i class="bi bi-filter"></i></button>
+                <button type="submit" class="btn btn-dark d-flex align-items-center justify-content-center gap-1" title="Filtrer">
+                    <i class="bi bi-filter"></i>
+                    <span class="d-md-none fw-semibold">Filtrer</span>
+                </button>
             </div>
         </form>
     </div>

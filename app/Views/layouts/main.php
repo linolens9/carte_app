@@ -32,10 +32,14 @@ declare(strict_types=1);
 <div class="app-wrapper">
     <!-- Sidebar -->
     <aside class="sidebar" id="appSidebar">
-        <div class="sidebar-header" style="padding: 0 1.25rem;">
-            <a href="<?= $base_path ?>/dashboard" class="sidebar-brand w-100 d-flex align-items-center justify-content-center text-decoration-none">
-                <img src="<?= $base_path ?>/assets/img/logo-dashboard-white.png" alt="MBOLO - Plateforme unifiée de gestion des identités" style="max-height: 46px; width: auto; max-width: 100%; object-fit: contain;">
+        <div class="sidebar-header d-flex align-items-center justify-content-between" style="padding: 0 1.25rem;">
+            <a href="<?= $base_path ?>/dashboard" class="sidebar-brand d-flex align-items-center text-decoration-none flex-grow-1 overflow-hidden">
+                <img src="<?= $base_path ?>/assets/img/logo-dashboard-white.png" alt="MBOLO - Plateforme unifiée de gestion des identités" style="max-height: 44px; width: auto; max-width: 180px; object-fit: contain;">
             </a>
+            <!-- Bouton Croix (X) pour fermer la sidebar sur mobile/tablette -->
+            <button type="button" class="btn btn-sm text-white-50 p-0 d-lg-none sidebar-close-btn" id="sidebarClose" aria-label="Fermer le menu" title="Fermer le menu">
+                <i class="bi bi-x-lg fs-5 text-white"></i>
+            </button>
         </div>
 
         <div class="sidebar-menu">
@@ -151,12 +155,15 @@ declare(strict_types=1);
         </div>
     </aside>
 
+    <!-- Overlay sombre pour fermer la sidebar au toucher sur smartphone -->
+    <div class="sidebar-backdrop d-lg-none" id="sidebarBackdrop" aria-hidden="true"></div>
+
     <!-- Main Content -->
     <div class="main-content">
         <!-- Topbar -->
         <header class="topbar">
-            <div class="d-flex align-items-center gap-3">
-                <button class="btn btn-light d-lg-none" id="sidebarToggle">
+            <div class="d-flex align-items-center gap-2 gap-sm-3 overflow-hidden">
+                <button class="btn btn-light d-lg-none flex-shrink-0" id="sidebarToggle" aria-label="Menu latéral" title="Menu">
                     <i class="bi bi-list fs-5"></i>
                 </button>
 
@@ -165,10 +172,10 @@ declare(strict_types=1);
                     $userAccessibleEtabs = \App\Core\Auth::getAccessibleEtablissements();
                 ?>
                 <?php if (\App\Core\Auth::hasRole('admin') || count($userAccessibleEtabs) > 1): ?>
-                    <div class="dropdown">
-                        <button class="btn btn-light border d-flex align-items-center gap-2 rounded-pill px-3 py-2" type="button" data-bs-toggle="dropdown">
+                    <div class="dropdown text-truncate">
+                        <button class="btn btn-light border d-flex align-items-center gap-2 rounded-pill px-2 px-sm-3 py-1 py-sm-2 etab-selector-btn" type="button" data-bs-toggle="dropdown">
                             <i class="bi bi-building text-primary"></i>
-                            <span class="fw-semibold text-truncate" style="max-width: 220px;">
+                            <span class="fw-semibold text-truncate etab-name-truncate">
                                 <?= $active_etab ? htmlspecialchars($active_etab['nom']) : 'Tous les établissements' ?>
                             </span>
                             <i class="bi bi-chevron-down text-muted" style="font-size: 0.75rem;"></i>
@@ -202,12 +209,12 @@ declare(strict_types=1);
                         </ul>
                     </div>
                 <?php elseif (!empty($active_etab)): ?>
-                    <div class="d-flex align-items-center gap-2 rounded-pill px-3 py-2 bg-light border">
+                    <div class="d-flex align-items-center gap-2 rounded-pill px-2 px-sm-3 py-1 py-sm-2 bg-light border etab-selector-btn">
                         <i class="bi bi-building text-primary"></i>
-                        <span class="fw-semibold text-truncate text-dark" style="max-width: 260px;">
+                        <span class="fw-semibold text-truncate text-dark etab-name-truncate">
                             <?= htmlspecialchars($active_etab['nom'] ?? '') ?>
                         </span>
-                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill font-monospace" style="font-size: 0.7rem;">
+                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill font-monospace d-none d-sm-inline" style="font-size: 0.7rem;">
                             <?= htmlspecialchars($active_etab['code'] ?? '') ?>
                         </span>
                     </div>
@@ -215,13 +222,43 @@ declare(strict_types=1);
             </div>
 
             <!-- Topbar Right -->
-            <div class="d-flex align-items-center gap-3">
-                <a href="<?= $base_path ?>/change-password" class="btn btn-outline-secondary btn-sm rounded-pill" title="Modifier mot de passe">
-                    <i class="bi bi-key me-1"></i>Mot de passe
-                </a>
-                <a href="<?= $base_path ?>/logout" class="btn btn-outline-danger btn-sm rounded-pill" title="Se déconnecter">
-                    <i class="bi bi-box-arrow-right me-1"></i>Déconnexion
-                </a>
+            <div class="d-flex align-items-center gap-2">
+                <!-- Boutons bureau (grand écran) -->
+                <div class="d-none d-md-flex align-items-center gap-2">
+                    <a href="<?= $base_path ?>/change-password" class="btn btn-outline-secondary btn-sm rounded-pill" title="Modifier mot de passe">
+                        <i class="bi bi-key me-1"></i>Mot de passe
+                    </a>
+                    <a href="<?= $base_path ?>/logout" class="btn btn-outline-danger btn-sm rounded-pill" title="Se déconnecter">
+                        <i class="bi bi-box-arrow-right me-1"></i>Déconnexion
+                    </a>
+                </div>
+
+                <!-- Menu Utilisateur (Mobile & Dropdown Rapide) -->
+                <div class="dropdown">
+                    <button class="btn btn-light border rounded-pill d-flex align-items-center gap-2 p-1 pe-2 topbar-user-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Menu utilisateur">
+                        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold" style="width: 32px; height: 32px; font-size: 0.8rem;">
+                            <?= strtoupper(substr($current_user['prenom'] ?? 'U', 0, 1)) . strtoupper(substr($current_user['nom'] ?? 'N', 0, 1)) ?>
+                        </div>
+                        <i class="bi bi-chevron-down text-muted" style="font-size: 0.7rem;"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-sm" style="min-width: 230px;">
+                        <li class="px-3 py-2 border-bottom">
+                            <div class="fw-semibold text-truncate"><?= htmlspecialchars(($current_user['prenom'] ?? '') . ' ' . ($current_user['nom'] ?? '')) ?></div>
+                            <small class="badge bg-primary-subtle text-primary border border-primary-subtle"><?= htmlspecialchars($current_user['role_libelle'] ?? 'Utilisateur') ?></small>
+                        </li>
+                        <li>
+                            <a class="dropdown-item py-2" href="<?= $base_path ?>/change-password">
+                                <i class="bi bi-key text-muted me-2"></i>Modifier mot de passe
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider my-1"></li>
+                        <li>
+                            <a class="dropdown-item py-2 text-danger" href="<?= $base_path ?>/logout">
+                                <i class="bi bi-box-arrow-right me-2"></i>Se déconnecter
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </header>
 
@@ -253,12 +290,61 @@ declare(strict_types=1);
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 
 <script>
-    // Toggle sidebar mobile
+    // Gestion complète de la Sidebar Mobile (ouverture / fermeture / croix / overlay / touche Échap)
     const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebarClose = document.getElementById('sidebarClose');
+    const sidebarBackdrop = document.getElementById('sidebarBackdrop');
     const appSidebar = document.getElementById('appSidebar');
-    if (sidebarToggle && appSidebar) {
-        sidebarToggle.addEventListener('click', () => {
-            appSidebar.classList.toggle('open');
+
+    function openSidebar() {
+        if (appSidebar) appSidebar.classList.add('open');
+        if (sidebarBackdrop) sidebarBackdrop.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeSidebar() {
+        if (appSidebar) appSidebar.classList.remove('open');
+        if (sidebarBackdrop) sidebarBackdrop.classList.remove('show');
+        document.body.style.overflow = '';
+    }
+
+    if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (appSidebar && appSidebar.classList.contains('open')) {
+                closeSidebar();
+            } else {
+                openSidebar();
+            }
+        });
+    }
+
+    if (sidebarClose) {
+        sidebarClose.addEventListener('click', (e) => {
+            e.preventDefault();
+            closeSidebar();
+        });
+    }
+
+    if (sidebarBackdrop) {
+        sidebarBackdrop.addEventListener('click', closeSidebar);
+    }
+
+    // Fermeture avec la touche Échap
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && appSidebar && appSidebar.classList.contains('open')) {
+            closeSidebar();
+        }
+    });
+
+    // Fermeture automatique lors du clic sur un lien du menu sur smartphone
+    if (appSidebar) {
+        appSidebar.querySelectorAll('.nav-link-custom').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth < 992) {
+                    closeSidebar();
+                }
+            });
         });
     }
 

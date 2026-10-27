@@ -101,9 +101,15 @@ $currentStatut = $filters['statut'] ?? '';
                     <option value="tous" <?= $currentStatut === 'tous' ? 'selected' : '' ?>>Tous les statuts</option>
                 </select>
             </div>
-            <div class="col-md-1 d-flex gap-1">
-                <button type="submit" class="btn btn-dark flex-grow-1" title="Filtrer"><i class="bi bi-filter"></i></button>
-                <a href="<?= $base_path ?>/etablissements" class="btn btn-light border" title="Réinitialiser"><i class="bi bi-arrow-counterclockwise"></i></a>
+            <div class="col-md-1 d-flex gap-2">
+                <button type="submit" class="btn btn-dark flex-grow-1 d-flex align-items-center justify-content-center gap-1" title="Filtrer">
+                    <i class="bi bi-filter"></i>
+                    <span class="d-md-none fw-semibold">Filtrer</span>
+                </button>
+                <a href="<?= $base_path ?>/etablissements" class="btn btn-light border d-flex align-items-center justify-content-center" title="Réinitialiser">
+                    <i class="bi bi-arrow-counterclockwise"></i>
+                    <span class="d-md-none ms-1">Effacer</span>
+                </a>
             </div>
         </form>
     </div>
