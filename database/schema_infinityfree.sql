@@ -117,6 +117,7 @@ CREATE TABLE IF NOT EXISTS departements (
     etablissement_id BIGINT UNSIGNED NOT NULL,
     code VARCHAR(20) NOT NULL,
     nom VARCHAR(150) NOT NULL,
+    type ENUM('departement', 'service') NOT NULL DEFAULT 'departement',
     parent_id BIGINT UNSIGNED NULL,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,

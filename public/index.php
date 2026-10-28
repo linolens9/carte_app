@@ -68,6 +68,24 @@ $router->post('/etablissements/{id}/departements/ajouter', [\App\Controllers\Eta
 $router->post('/etablissements/{id}/filieres/ajouter', [\App\Controllers\EtablissementController::class, 'addFiliere'], ['auth', 'permission:etablissement.modifier']);
 $router->post('/etablissements/{id}/classes/ajouter', [\App\Controllers\EtablissementController::class, 'addClasse'], ['auth', 'permission:etablissement.modifier']);
 
+// 3.1 CRUD Classes
+$router->get('/classes', [\App\Controllers\ClasseController::class, 'index'], ['auth']);
+$router->post('/classes/creer', [\App\Controllers\ClasseController::class, 'store'], ['auth']);
+$router->post('/classes/{id}/modifier', [\App\Controllers\ClasseController::class, 'update'], ['auth']);
+$router->post('/classes/{id}/supprimer', [\App\Controllers\ClasseController::class, 'delete'], ['auth']);
+
+// 3.2 CRUD Filières
+$router->get('/filieres', [\App\Controllers\FiliereController::class, 'index'], ['auth']);
+$router->post('/filieres/creer', [\App\Controllers\FiliereController::class, 'store'], ['auth']);
+$router->post('/filieres/{id}/modifier', [\App\Controllers\FiliereController::class, 'update'], ['auth']);
+$router->post('/filieres/{id}/supprimer', [\App\Controllers\FiliereController::class, 'delete'], ['auth']);
+
+// 3.3 CRUD Départements & Services
+$router->get('/departements', [\App\Controllers\DepartementController::class, 'index'], ['auth']);
+$router->post('/departements/creer', [\App\Controllers\DepartementController::class, 'store'], ['auth']);
+$router->post('/departements/{id}/modifier', [\App\Controllers\DepartementController::class, 'update'], ['auth']);
+$router->post('/departements/{id}/supprimer', [\App\Controllers\DepartementController::class, 'delete'], ['auth']);
+
 // 4. Utilisateurs
 $router->get('/users', [\App\Controllers\UserController::class, 'index'], ['auth', 'permission:utilisateur.consulter']);
 $router->get('/users/creer', [\App\Controllers\UserController::class, 'create'], ['auth', 'permission:utilisateur.creer']);

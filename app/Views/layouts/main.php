@@ -61,6 +61,18 @@ declare(strict_types=1);
                     <i class="bi bi-buildings"></i>
                     <span>Établissements</span>
                 </a>
+                <a href="<?= $base_path ?>/classes" class="nav-link-custom <?= str_contains($_SERVER['REQUEST_URI'] ?? '', '/classes') ? 'active' : '' ?>">
+                    <i class="bi bi-door-open"></i>
+                    <span>Classes</span>
+                </a>
+                <a href="<?= $base_path ?>/filieres" class="nav-link-custom <?= str_contains($_SERVER['REQUEST_URI'] ?? '', '/filieres') ? 'active' : '' ?>">
+                    <i class="bi bi-diagram-3"></i>
+                    <span>Filières & Séries</span>
+                </a>
+                <a href="<?= $base_path ?>/departements" class="nav-link-custom <?= str_contains($_SERVER['REQUEST_URI'] ?? '', '/departements') ? 'active' : '' ?>">
+                    <i class="bi bi-building-gear"></i>
+                    <span>Départements & Services</span>
+                </a>
             <?php endif; ?>
 
             <?php

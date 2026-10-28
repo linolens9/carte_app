@@ -171,9 +171,14 @@ declare(strict_types=1);
         <div class="tab-pane fade show active" id="tab-classes">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h6 class="fw-bold mb-0">Classes et Niveaux</h6>
-                <button class="btn btn-primary btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#modalAddClasse">
-                    <i class="bi bi-plus me-1"></i>Ajouter une classe
-                </button>
+                <div class="d-flex gap-2">
+                    <a href="<?= $base_path ?>/classes?etablissement_id=<?= $etab['id'] ?>" class="btn btn-outline-secondary btn-sm rounded-pill">
+                        <i class="bi bi-box-arrow-up-right me-1"></i>Gestion avancée
+                    </a>
+                    <button class="btn btn-primary btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#modalAddClasse">
+                        <i class="bi bi-plus me-1"></i>Ajouter une classe
+                    </button>
+                </div>
             </div>
 
             <?php if (empty($classes)): ?>
@@ -214,9 +219,14 @@ declare(strict_types=1);
         <div class="tab-pane fade" id="tab-filieres">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h6 class="fw-bold mb-0">Filières et Séries</h6>
-                <button class="btn btn-primary btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#modalAddFiliere">
-                    <i class="bi bi-plus me-1"></i>Ajouter une filière
-                </button>
+                <div class="d-flex gap-2">
+                    <a href="<?= $base_path ?>/filieres?etablissement_id=<?= $etab['id'] ?>" class="btn btn-outline-secondary btn-sm rounded-pill">
+                        <i class="bi bi-box-arrow-up-right me-1"></i>Gestion avancée
+                    </a>
+                    <button class="btn btn-primary btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#modalAddFiliere">
+                        <i class="bi bi-plus me-1"></i>Ajouter une filière
+                    </button>
+                </div>
             </div>
 
             <?php if (empty($filieres)): ?>
@@ -249,9 +259,14 @@ declare(strict_types=1);
         <div class="tab-pane fade" id="tab-dept">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h6 class="fw-bold mb-0">Départements, Facultés & Directions</h6>
-                <button class="btn btn-primary btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#modalAddDept">
-                    <i class="bi bi-plus me-1"></i>Ajouter un département
-                </button>
+                <div class="d-flex gap-2">
+                    <a href="<?= $base_path ?>/departements?etablissement_id=<?= $etab['id'] ?>" class="btn btn-outline-secondary btn-sm rounded-pill">
+                        <i class="bi bi-box-arrow-up-right me-1"></i>Gestion avancée
+                    </a>
+                    <button class="btn btn-primary btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#modalAddDept">
+                        <i class="bi bi-plus me-1"></i>Ajouter un département
+                    </button>
+                </div>
             </div>
 
             <?php if (empty($departements)): ?>
