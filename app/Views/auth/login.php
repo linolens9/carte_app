@@ -66,10 +66,10 @@ declare(strict_types=1);
         </button>
     </div>
 
-    <div class="text-center text-muted small mt-4 pt-3 border-top">
+    <!-- <div class="text-center text-muted small mt-4 pt-3 border-top">
         <span>Compte par défaut : <strong>admin@carteapp.com</strong></span><br>
         <span>Mot de passe : <code>Admin@2026</code></span>
-    </div>
+    </div> -->
 </form>
 
 <script>
