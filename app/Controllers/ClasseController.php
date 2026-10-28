@@ -39,16 +39,16 @@ class ClasseController extends Controller
         }
 
         $accessibleEtabs = Auth::getAccessibleEtablissements();
-        $selectedEtabId = (int)$this->request->get('etablissement_id', Auth::getActiveEtablissementId() ?? 0);
+        $selectedEtabId = (int)$this->request->query('etablissement_id', Auth::getActiveEtablissementId() ?? 0);
 
         if ($selectedEtabId === 0 && count($accessibleEtabs) === 1) {
             $selectedEtabId = (int)$accessibleEtabs[0]['id'];
         }
 
-        $selectedFiliereId = (int)$this->request->get('filiere_id', 0);
-        $niveau = trim((string)$this->request->get('niveau', ''));
-        $annee = trim((string)$this->request->get('annee', ''));
-        $search = trim((string)$this->request->get('q', ''));
+        $selectedFiliereId = (int)$this->request->query('filiere_id', 0);
+        $niveau = trim((string)$this->request->query('niveau', ''));
+        $annee = trim((string)$this->request->query('annee', ''));
+        $search = trim((string)$this->request->query('q', ''));
 
         // Récupération des classes
         $items = $this->classeModel->getByEtablissement(

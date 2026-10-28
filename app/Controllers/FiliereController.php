@@ -39,14 +39,14 @@ class FiliereController extends Controller
         }
 
         $accessibleEtabs = Auth::getAccessibleEtablissements();
-        $selectedEtabId = (int)$this->request->get('etablissement_id', Auth::getActiveEtablissementId() ?? 0);
+        $selectedEtabId = (int)$this->request->query('etablissement_id', Auth::getActiveEtablissementId() ?? 0);
 
         if ($selectedEtabId === 0 && count($accessibleEtabs) === 1) {
             $selectedEtabId = (int)$accessibleEtabs[0]['id'];
         }
 
-        $selectedDeptId = (int)$this->request->get('departement_id', 0);
-        $search = trim((string)$this->request->get('q', ''));
+        $selectedDeptId = (int)$this->request->query('departement_id', 0);
+        $search = trim((string)$this->request->query('q', ''));
 
         // Récupération des filières
         $items = $this->filiereModel->getByEtablissement(

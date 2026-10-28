@@ -36,15 +36,15 @@ class DepartementController extends Controller
         }
 
         $accessibleEtabs = Auth::getAccessibleEtablissements();
-        $selectedEtabId = (int)$this->request->get('etablissement_id', Auth::getActiveEtablissementId() ?? 0);
+        $selectedEtabId = (int)$this->request->query('etablissement_id', Auth::getActiveEtablissementId() ?? 0);
         
         // Si aucun établissement spécifié et qu'un seul est accessible, le sélectionner
         if ($selectedEtabId === 0 && count($accessibleEtabs) === 1) {
             $selectedEtabId = (int)$accessibleEtabs[0]['id'];
         }
 
-        $filterType = (string)$this->request->get('type', '');
-        $search = trim((string)$this->request->get('q', ''));
+        $filterType = (string)$this->request->query('type', '');
+        $search = trim((string)$this->request->query('q', ''));
 
         // Récupération des départements & services
         $items = $this->deptModel->getByEtablissement(
