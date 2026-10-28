@@ -207,10 +207,7 @@ declare(strict_types=1);
 
                     <!-- Boutons d'acquisition -->
                     <div class="d-grid gap-2">
-                        <button type="button" class="btn btn-outline-success btn-sm rounded-pill py-2 fw-semibold" id="btnOpenSmartphone">
-                            <i class="bi bi-phone me-1"></i>Filmer via Smartphone (USB)
-                        </button>
-                        <button type="button" class="btn btn-outline-primary btn-sm rounded-pill py-2" id="btnOpenWebcam">
+                        <button type="button" class="btn btn-outline-primary btn-sm rounded-pill py-2 fw-semibold" id="btnOpenWebcam">
                             <i class="bi bi-camera-video me-1"></i>Capturer via Webcam
                         </button>
                         <label class="btn btn-outline-secondary btn-sm rounded-pill py-2 mb-0 cursor-pointer">

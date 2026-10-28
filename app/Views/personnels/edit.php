@@ -180,11 +180,8 @@ $photoSrc = $hasPhoto ? asset_url($personnel['photo']) : '';
                     </p>
 
                     <div class="d-grid gap-2">
-                        <button type="button" class="btn btn-outline-success rounded-pill btn-sm fw-semibold" id="btnOpenSmartphone">
-                            <i class="bi bi-phone me-1"></i>Filmer via Smartphone (USB)
-                        </button>
-                        <button type="button" class="btn btn-primary rounded-pill btn-sm" id="btnOpenWebcam">
-                            <i class="bi bi-webcam me-1"></i>Prendre via Webcam
+                        <button type="button" class="btn btn-primary rounded-pill btn-sm py-2 fw-semibold" id="btnOpenWebcam">
+                            <i class="bi bi-camera-video me-1"></i>Prendre via Webcam
                         </button>
                         
                         <label class="btn btn-outline-primary rounded-pill btn-sm mb-0">
