@@ -115,9 +115,9 @@ class DashboardController extends Controller
         $stmt->execute($unionParams);
         $sansPhoto = $stmt->fetchAll();
 
-        // 3. Activités récentes (logs) - visible uniquement par l'administrateur et le chef d'établissement (responsable)
+        // 3. Activités récentes (logs) - piloté dynamiquement par la permission log.consulter ou rôle admin/responsable
         $recentLogs = [];
-        if (Auth::hasRole('admin', 'responsable', 'chef_etablissement')) {
+        if (Auth::hasRole('admin') || Auth::can('log.consulter') || Auth::hasRole('responsable', 'chef_etablissement')) {
             $logFilter = "";
             $logParams = [];
             if ($activeEtabId !== null) {

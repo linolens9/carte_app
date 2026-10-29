@@ -201,6 +201,56 @@ class Auth
         return in_array($u['role_code'], $roles, true);
     }
 
+    private static ?array $runtimePermissions = null;
+
+    /**
+     * Retourne la liste des permissions de l'utilisateur actif rechargée en temps réel.
+     */
+    public static function permissions(): array
+    {
+        if (self::$runtimePermissions !== null) {
+            return self::$runtimePermissions;
+        }
+
+        $u = self::user();
+        if (!$u || empty($u['role_id'])) {
+            return [];
+        }
+
+        // L'admin principal a toujours toutes les permissions
+        if (($u['role_code'] ?? '') === 'admin') {
+            self::$runtimePermissions = ['*'];
+            return self::$runtimePermissions;
+        }
+
+        // Chargement direct depuis la base pour répercuter immédiatement tout changement de RBAC
+        try {
+            $db = Database::getInstance();
+            $stmt = $db->prepare("
+                SELECT p.code
+                FROM role_permission rp
+                JOIN permissions p ON rp.permission_id = p.id
+                WHERE rp.role_id = :role_id
+            ");
+            $stmt->execute([':role_id' => (int)$u['role_id']]);
+            self::$runtimePermissions = $stmt->fetchAll(PDO::FETCH_COLUMN) ?: [];
+
+            // Synchronisation de la session
+            if (isset($_SESSION[self::SESSION_USER_KEY])) {
+                $_SESSION[self::SESSION_USER_KEY]['permissions'] = self::$runtimePermissions;
+            }
+        } catch (\Throwable $e) {
+            self::$runtimePermissions = $u['permissions'] ?? [];
+        }
+
+        return self::$runtimePermissions;
+    }
+
+    public static function clearPermissionsCache(): void
+    {
+        self::$runtimePermissions = null;
+    }
+
     public static function hasPermission(string $permission): bool
     {
         $u = self::user();
@@ -208,10 +258,10 @@ class Auth
             return false;
         }
         // L'admin principal a toujours toutes les permissions
-        if ($u['role_code'] === 'admin') {
+        if (($u['role_code'] ?? '') === 'admin') {
             return true;
         }
-        return in_array($permission, $u['permissions'] ?? [], true);
+        return in_array($permission, self::permissions(), true);
     }
 
     public static function can(string $permission): bool

@@ -80,6 +80,7 @@ class RoleController extends Controller
         $permissionIds = is_array($selectedPermissions) ? array_map('intval', $selectedPermissions) : [];
 
         $this->roleModel->syncPermissions($id, $permissionIds);
+        Auth::clearPermissionsCache();
 
         Logger::log(Auth::id(), null, 'role.permissions_maj', 'roles', $id, null, ['permissions' => $permissionIds], $this->request);
 

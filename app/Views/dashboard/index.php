@@ -356,7 +356,7 @@ declare(strict_types=1);
     </div>
 </div>
 
-<?php if (\App\Core\Auth::hasRole('admin', 'responsable', 'chef_etablissement')): ?>
+<?php if (\App\Core\Auth::hasRole('admin') || \App\Core\Auth::can('log.consulter') || \App\Core\Auth::hasRole('responsable', 'chef_etablissement')): ?>
 <!-- Activités Récentes (Section 7.3) -->
 <div class="card-custom">
     <div class="card-header-custom">

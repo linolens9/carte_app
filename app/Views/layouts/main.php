@@ -55,24 +55,32 @@ declare(strict_types=1);
                 </a>
             <?php endif; ?>
 
-            <?php if (\App\Core\Auth::hasRole('admin', 'gestionnaire')): ?>
+            <?php 
+                $canEtabs = \App\Core\Auth::can('etablissement.consulter');
+                $canStructures = \App\Core\Auth::can('etablissement.modifier') || \App\Core\Auth::can('etablissement.creer') || \App\Core\Auth::hasRole('admin', 'gestionnaire', 'responsable');
+            ?>
+            <?php if ($canEtabs || $canStructures): ?>
                 <div class="menu-title">Gestion des Structures</div>
-                <a href="<?= $base_path ?>/etablissements" class="nav-link-custom <?= str_contains($_SERVER['REQUEST_URI'] ?? '', '/etablissements') ? 'active' : '' ?>">
-                    <i class="bi bi-buildings"></i>
-                    <span>Établissements</span>
-                </a>
-                <a href="<?= $base_path ?>/classes" class="nav-link-custom <?= str_contains($_SERVER['REQUEST_URI'] ?? '', '/classes') ? 'active' : '' ?>">
-                    <i class="bi bi-door-open"></i>
-                    <span>Classes</span>
-                </a>
-                <a href="<?= $base_path ?>/filieres" class="nav-link-custom <?= str_contains($_SERVER['REQUEST_URI'] ?? '', '/filieres') ? 'active' : '' ?>">
-                    <i class="bi bi-diagram-3"></i>
-                    <span>Filières & Séries</span>
-                </a>
-                <a href="<?= $base_path ?>/departements" class="nav-link-custom <?= str_contains($_SERVER['REQUEST_URI'] ?? '', '/departements') ? 'active' : '' ?>">
-                    <i class="bi bi-building-gear"></i>
-                    <span>Départements & Services</span>
-                </a>
+                <?php if ($canEtabs): ?>
+                    <a href="<?= $base_path ?>/etablissements" class="nav-link-custom <?= str_contains($_SERVER['REQUEST_URI'] ?? '', '/etablissements') ? 'active' : '' ?>">
+                        <i class="bi bi-buildings"></i>
+                        <span>Établissements</span>
+                    </a>
+                <?php endif; ?>
+                <?php if ($canStructures): ?>
+                    <a href="<?= $base_path ?>/classes" class="nav-link-custom <?= str_contains($_SERVER['REQUEST_URI'] ?? '', '/classes') ? 'active' : '' ?>">
+                        <i class="bi bi-door-open"></i>
+                        <span>Classes</span>
+                    </a>
+                    <a href="<?= $base_path ?>/filieres" class="nav-link-custom <?= str_contains($_SERVER['REQUEST_URI'] ?? '', '/filieres') ? 'active' : '' ?>">
+                        <i class="bi bi-diagram-3"></i>
+                        <span>Filières & Séries</span>
+                    </a>
+                    <a href="<?= $base_path ?>/departements" class="nav-link-custom <?= str_contains($_SERVER['REQUEST_URI'] ?? '', '/departements') ? 'active' : '' ?>">
+                        <i class="bi bi-building-gear"></i>
+                        <span>Départements & Services</span>
+                    </a>
+                <?php endif; ?>
             <?php endif; ?>
 
             <?php
@@ -84,64 +92,99 @@ declare(strict_types=1);
                 $isHigherEd = in_array($etabType, ['universite', 'centre_formation'], true);
                 $isPro = ($etabCat === 'professionnel') || in_array($etabType, ['entreprise', 'administration', 'association', 'ong', 'etablissement_prive'], true);
 
-                $showEleves = !$isHigherEd && !$isPro;
-                $showEtudiants = !$isSchool && !$isPro && ($isAdminOrGest || $isHigherEd);
-                $showPersonnel = true;
+                $canEleves = \App\Core\Auth::can('eleve.consulter');
+                $canEtudiants = \App\Core\Auth::can('etudiant.consulter');
+                $canPersonnels = \App\Core\Auth::can('personnel.consulter');
+
+                $showEleves = $canEleves && (!$isHigherEd && !$isPro);
+                $showEtudiants = $canEtudiants && (!$isSchool && !$isPro && ($isAdminOrGest || $isHigherEd));
+                $showPersonnel = $canPersonnels;
             ?>
 
-            <div class="menu-title">Bénéficiaires</div>
-            <?php if ($showEleves): ?>
-                <a href="<?= $base_path ?>/eleves" class="nav-link-custom <?= str_contains($_SERVER['REQUEST_URI'] ?? '', '/eleves') ? 'active' : '' ?>">
-                    <i class="bi bi-backpack"></i>
-                    <span>Élèves</span>
-                </a>
-            <?php endif; ?>
-            <?php if ($showEtudiants): ?>
-                <a href="<?= $base_path ?>/etudiants" class="nav-link-custom <?= str_contains($_SERVER['REQUEST_URI'] ?? '', '/etudiants') ? 'active' : '' ?>">
-                    <i class="bi bi-mortarboard"></i>
-                    <span>Étudiants</span>
-                </a>
-            <?php endif; ?>
-            <?php if ($showPersonnel): ?>
-                <a href="<?= $base_path ?>/personnels" class="nav-link-custom <?= str_contains($_SERVER['REQUEST_URI'] ?? '', '/personnels') ? 'active' : '' ?>">
-                    <i class="bi bi-person-badge"></i>
-                    <span>Personnel</span>
-                </a>
+            <?php if ($showEleves || $showEtudiants || $showPersonnel): ?>
+                <div class="menu-title">Bénéficiaires</div>
+                <?php if ($showEleves): ?>
+                    <a href="<?= $base_path ?>/eleves" class="nav-link-custom <?= str_contains($_SERVER['REQUEST_URI'] ?? '', '/eleves') ? 'active' : '' ?>">
+                        <i class="bi bi-backpack"></i>
+                        <span>Élèves</span>
+                    </a>
+                <?php endif; ?>
+                <?php if ($showEtudiants): ?>
+                    <a href="<?= $base_path ?>/etudiants" class="nav-link-custom <?= str_contains($_SERVER['REQUEST_URI'] ?? '', '/etudiants') ? 'active' : '' ?>">
+                        <i class="bi bi-mortarboard"></i>
+                        <span>Étudiants</span>
+                    </a>
+                <?php endif; ?>
+                <?php if ($showPersonnel): ?>
+                    <a href="<?= $base_path ?>/personnels" class="nav-link-custom <?= str_contains($_SERVER['REQUEST_URI'] ?? '', '/personnels') ? 'active' : '' ?>">
+                        <i class="bi bi-person-badge"></i>
+                        <span>Personnel</span>
+                    </a>
+                <?php endif; ?>
             <?php endif; ?>
 
-            <div class="menu-title">Cartes & Impression</div>
-            <a href="<?= $base_path ?>/cartes" class="nav-link-custom <?= str_contains($_SERVER['REQUEST_URI'] ?? '', '/cartes') && !str_contains($_SERVER['REQUEST_URI'] ?? '', '/templates') ? 'active' : '' ?>">
-                <i class="bi bi-card-heading"></i>
-                <span>Cartes d'identité</span>
-            </a>
-            <a href="<?= $base_path ?>/templates" class="nav-link-custom <?= str_contains($_SERVER['REQUEST_URI'] ?? '', '/templates') ? 'active' : '' ?>">
-                <i class="bi bi-palette"></i>
-                <span>Modèles de cartes</span>
-            </a>
-            <a href="<?= $base_path ?>/impressions" class="nav-link-custom <?= str_contains($_SERVER['REQUEST_URI'] ?? '', '/impressions') ? 'active' : '' ?>">
-                <i class="bi bi-printer"></i>
-                <span>Impression & Lots</span>
-            </a>
+            <?php
+                $canCartes = \App\Core\Auth::can('carte.consulter');
+                $canTemplates = \App\Core\Auth::can('template.consulter');
+                $canImpressions = \App\Core\Auth::can('carte.imprimer');
+            ?>
+            <?php if ($canCartes || $canTemplates || $canImpressions): ?>
+                <div class="menu-title">Cartes & Impression</div>
+                <?php if ($canCartes): ?>
+                    <a href="<?= $base_path ?>/cartes" class="nav-link-custom <?= str_contains($_SERVER['REQUEST_URI'] ?? '', '/cartes') && !str_contains($_SERVER['REQUEST_URI'] ?? '', '/templates') ? 'active' : '' ?>">
+                        <i class="bi bi-card-heading"></i>
+                        <span>Cartes d'identité</span>
+                    </a>
+                <?php endif; ?>
+                <?php if ($canTemplates): ?>
+                    <a href="<?= $base_path ?>/templates" class="nav-link-custom <?= str_contains($_SERVER['REQUEST_URI'] ?? '', '/templates') ? 'active' : '' ?>">
+                        <i class="bi bi-palette"></i>
+                        <span>Modèles de cartes</span>
+                    </a>
+                <?php endif; ?>
+                <?php if ($canImpressions): ?>
+                    <a href="<?= $base_path ?>/impressions" class="nav-link-custom <?= str_contains($_SERVER['REQUEST_URI'] ?? '', '/impressions') ? 'active' : '' ?>">
+                        <i class="bi bi-printer"></i>
+                        <span>Impression & Lots</span>
+                    </a>
+                <?php endif; ?>
+            <?php endif; ?>
 
-            <?php if (\App\Core\Auth::hasRole('admin', 'gestionnaire')): ?>
+            <?php 
+                $canUsers = \App\Core\Auth::can('utilisateur.consulter');
+                $canRoles = \App\Core\Auth::can('role.gerer');
+                $canBackups = \App\Core\Auth::can('sauvegarde.gerer');
+                $canLogs = \App\Core\Auth::can('log.consulter');
+                $canParams = \App\Core\Auth::can('parametre.gerer');
+                $hasAdminSection = $canUsers || $canRoles || $canBackups || $canLogs || $canParams;
+            ?>
+            <?php if ($hasAdminSection): ?>
                 <div class="menu-title">Administration</div>
-                <a href="<?= $base_path ?>/users" class="nav-link-custom <?= str_contains($_SERVER['REQUEST_URI'] ?? '', '/users') ? 'active' : '' ?>">
-                    <i class="bi bi-people"></i>
-                    <span>Utilisateurs</span>
-                </a>
-                <?php if (\App\Core\Auth::hasRole('admin')): ?>
+                <?php if ($canUsers): ?>
+                    <a href="<?= $base_path ?>/users" class="nav-link-custom <?= str_contains($_SERVER['REQUEST_URI'] ?? '', '/users') ? 'active' : '' ?>">
+                        <i class="bi bi-people"></i>
+                        <span>Utilisateurs</span>
+                    </a>
+                <?php endif; ?>
+                <?php if ($canRoles): ?>
                     <a href="<?= $base_path ?>/roles" class="nav-link-custom <?= str_contains($_SERVER['REQUEST_URI'] ?? '', '/roles') ? 'active' : '' ?>">
                         <i class="bi bi-shield-lock"></i>
                         <span>Rôles & Droits</span>
                     </a>
+                <?php endif; ?>
+                <?php if ($canBackups): ?>
                     <a href="<?= $base_path ?>/sauvegardes" class="nav-link-custom <?= str_contains($_SERVER['REQUEST_URI'] ?? '', '/sauvegardes') ? 'active' : '' ?>">
                         <i class="bi bi-database-check"></i>
                         <span>Sauvegardes</span>
                     </a>
+                <?php endif; ?>
+                <?php if ($canLogs): ?>
                     <a href="<?= $base_path ?>/logs" class="nav-link-custom <?= str_contains($_SERVER['REQUEST_URI'] ?? '', '/logs') ? 'active' : '' ?>">
                         <i class="bi bi-clock-history"></i>
                         <span>Journal d'audit</span>
                     </a>
+                <?php endif; ?>
+                <?php if ($canParams): ?>
                     <a href="<?= $base_path ?>/parametres" class="nav-link-custom <?= str_contains($_SERVER['REQUEST_URI'] ?? '', '/parametres') ? 'active' : '' ?>">
                         <i class="bi bi-gear"></i>
                         <span>Paramètres</span>
