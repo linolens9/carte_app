@@ -356,6 +356,7 @@ declare(strict_types=1);
     </div>
 </div>
 
+<?php if (\App\Core\Auth::hasRole('admin', 'responsable', 'chef_etablissement')): ?>
 <!-- Activités Récentes (Section 7.3) -->
 <div class="card-custom">
     <div class="card-header-custom">
@@ -363,9 +364,11 @@ declare(strict_types=1);
             <h6 class="fw-bold mb-0">Activités Récentes</h6>
             <small class="text-muted">Journal des 15 dernières actions système</small>
         </div>
-        <a href="<?= $base_path ?>/logs" class="btn btn-outline-secondary btn-sm rounded-pill">
-            <i class="bi bi-journal-text me-1"></i>Consulter le journal complet
-        </a>
+        <?php if (\App\Core\Auth::hasRole('admin') || \App\Core\Auth::can('log.consulter')): ?>
+            <a href="<?= $base_path ?>/logs" class="btn btn-outline-secondary btn-sm rounded-pill">
+                <i class="bi bi-journal-text me-1"></i>Consulter le journal complet
+            </a>
+        <?php endif; ?>
     </div>
     <div class="p-0">
         <?php if (empty($recentLogs)): ?>
@@ -408,6 +411,7 @@ declare(strict_types=1);
         <?php endif; ?>
     </div>
 </div>
+<?php endif; ?>
 
 <!-- Script Chart.js -->
 <script>

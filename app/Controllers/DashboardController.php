@@ -115,24 +115,31 @@ class DashboardController extends Controller
         $stmt->execute($unionParams);
         $sansPhoto = $stmt->fetchAll();
 
-        // 3. Activités récentes (logs)
-        $logFilter = "";
-        $logParams = [];
-        if ($activeEtabId !== null) {
-            $logFilter = "WHERE l.etablissement_id = :eid OR l.etablissement_id IS NULL";
-            $logParams[':eid'] = $activeEtabId;
+        // 3. Activités récentes (logs) - visible uniquement par l'administrateur et le chef d'établissement (responsable)
+        $recentLogs = [];
+        if (Auth::hasRole('admin', 'responsable', 'chef_etablissement')) {
+            $logFilter = "";
+            $logParams = [];
+            if ($activeEtabId !== null) {
+                if (Auth::hasRole('admin')) {
+                    $logFilter = "WHERE l.etablissement_id = :eid OR l.etablissement_id IS NULL";
+                } else {
+                    $logFilter = "WHERE l.etablissement_id = :eid";
+                }
+                $logParams[':eid'] = $activeEtabId;
+            }
+            $stmt = $db->prepare("
+                SELECT l.*, u.nom AS user_nom, u.prenom AS user_prenom, e.nom AS etab_nom
+                FROM logs l
+                LEFT JOIN users u ON l.user_id = u.id
+                LEFT JOIN etablissements e ON l.etablissement_id = e.id
+                $logFilter
+                ORDER BY l.created_at DESC
+                LIMIT 15
+            ");
+            $stmt->execute($logParams);
+            $recentLogs = $stmt->fetchAll();
         }
-        $stmt = $db->prepare("
-            SELECT l.*, u.nom AS user_nom, u.prenom AS user_prenom, e.nom AS etab_nom
-            FROM logs l
-            LEFT JOIN users u ON l.user_id = u.id
-            LEFT JOIN etablissements e ON l.etablissement_id = e.id
-            $logFilter
-            ORDER BY l.created_at DESC
-            LIMIT 15
-        ");
-        $stmt->execute($logParams);
-        $recentLogs = $stmt->fetchAll();
 
         // 4. Données pour graphiques
         // Répartition élèves / étudiants / personnels selon le type de structure
